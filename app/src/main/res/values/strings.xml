@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE resources [
+    <!ENTITY appname "In Case Of Emergency">
+    <!ENTITY sos "SOS">
+]>
+<resources>
+    <string name="app_name">&appname;</string>
+    <string name="title_home">Home</string>
+    <string name="title_preferences">Preferences</string>
+    <string name="sos">&sos;</string>
+    <string name="warn_message">Warning</string>
+    <string name="wrn_sos_btn_press">Pressing &sos; button 5 times will send an alert to your emergency contact and to the nearest police station.</string>
+    <string name="emergency_contact">Emergency Contact</string>
+    <string name="unspecified">Unspecified (Recommended to specify one)</string>
+    <string name="change_contact">Update Emergency Contact</string>
+</resources>

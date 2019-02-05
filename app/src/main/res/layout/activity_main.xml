@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".activities.MainActivity"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <edu.nandboolean.incaseofemergency.widgets.EmergencyButton
+        android:id="@+id/btn_sos"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="50dp"
+        android:text="@string/sos"
+        android:textSize="40sp"
+        android:background="@color/colorPrimary"
+        android:textColor="@android:color/white"
+        app:tap_count="5" />
+
+    <include
+        android:id="@+id/note_to_user"
+        layout="@layout/user_note"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp" />
+
+    <include
+        layout="@layout/emergency_contact_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp" />
+
+</LinearLayout>

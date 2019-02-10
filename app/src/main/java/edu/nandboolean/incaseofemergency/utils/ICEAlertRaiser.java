@@ -4,6 +4,9 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.Build;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
 import android.telephony.SmsManager;
 import android.widget.Toast;
 
@@ -47,9 +50,19 @@ public class ICEAlertRaiser {
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(contact.getNumber(), null, message, null, null);
             Toast.makeText(context, "Successfully alerted " + contact.getName(), Toast.LENGTH_LONG).show();
+            vibrateDevice(context);
         } catch (Exception e) {
             Toast.makeText(context, "ERROR! Could not alert " + contact.getName(), Toast.LENGTH_LONG).show();
             e.printStackTrace();
+        }
+    }
+
+    private static void vibrateDevice(Context context) {
+        Vibrator emergencyAlertVibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            emergencyAlertVibrator.vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+        } else {
+            emergencyAlertVibrator.vibrate(500);
         }
     }
 }

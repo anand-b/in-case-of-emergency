@@ -9,4 +9,5 @@ public class ICEConstants {
 
     public static final String EMERGENCY_CONTACT_NAME_PREF_KEY = PACKAGE_NAME + ".contactname";
     public static final String EMERGENCY_CONTACT_NUMBER_PREF_KEY = PACKAGE_NAME + ".contactnumber";
+    public static final String DEFAULT_EMERGENCY_SMS_TEMPLATE = "EMERGENCY ALERT!! Please arrive ASAP to %s.\n(%s)";
 }

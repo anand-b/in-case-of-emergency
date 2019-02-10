@@ -13,4 +13,5 @@
     <string name="emergency_contact">Emergency Contact</string>
     <string name="unspecified">Unspecified (Recommended to specify one)</string>
     <string name="change_contact">Update Emergency Contact</string>
+    <string name="error_detect_location">Cannot detect location.</string>
 </resources>

@@ -1,11 +1,12 @@
 package edu.nandboolean.incaseofemergency.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.QuickContactBadge;
@@ -14,7 +15,9 @@ import android.widget.Toast;
 
 import edu.nandboolean.incaseofemergency.ICEActivity;
 import edu.nandboolean.incaseofemergency.R;
+import edu.nandboolean.incaseofemergency.beans.EmergencyContact;
 import edu.nandboolean.incaseofemergency.services.EmergencyGestureTrackingService;
+import edu.nandboolean.incaseofemergency.utils.EmergencyContactRetriever;
 import edu.nandboolean.incaseofemergency.utils.ICEAlertRaiser;
 import edu.nandboolean.incaseofemergency.utils.ICEConstants;
 import edu.nandboolean.incaseofemergency.widgets.EmergencyButton;
@@ -42,6 +45,8 @@ public class MainActivity extends ICEActivity
         quickContactBadge = findViewById(R.id.emergency_contact_badge);
         emergencyContact = findViewById(R.id.emergency_contact_tv);
         // TODO : Set the quickContactBadge and emergency contact details from preference, if available.
+        EmergencyContact contact = getEmergencyContactFromPreference();
+        updateEmergencyContactDetailsInUI(contact);
 
         Intent emergencyService = new Intent(this, EmergencyGestureTrackingService.class);
         stopService(emergencyService); // Better to stop a service even if it isn't started...
@@ -62,23 +67,46 @@ public class MainActivity extends ICEActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == ICEConstants.REQUEST_SELECT_CONTACT && resultCode == RESULT_OK) {
-            Uri contactUri = data.getData();
-            // TODO : Set the quickContactBadge
-            // TODO : Set emergency contact details
-            // quickContactBadge.assignContactUri(contactUri);
-            updateEmergencyContactDetailsInUI();
-            // TODO : Save contact to preference
-            saveEmergencyContactInPreference();
+            if (data != null) {
+                Uri contactUri = data.getData();
+                if (contactUri != null) {
+                    // TODO : Set the quickContactBadge
+                    String lookupKey = EmergencyContactRetriever.getLookUpKeyFromContactUri(this, contactUri);
+                    EmergencyContact contact = EmergencyContactRetriever.getContactBasicDetails(this, lookupKey);
+                    if (contact != null) {
+                        // quickContactBadge.assignContactUri(contactUri);
+                        updateEmergencyContactDetailsInUI(contact);
+                        saveEmergencyContactInPreference(contact);
+                    }
+                }
+            }
         }
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void updateEmergencyContactDetailsInUI() {
-
+    private void updateEmergencyContactDetailsInUI(EmergencyContact contact) {
+        if (contact != null) {
+            emergencyContact.setText(contact.toString());
+        }
     }
 
-    private void saveEmergencyContactInPreference() {
+    private void saveEmergencyContactInPreference(EmergencyContact contact) {
+        SharedPreferences preferences = getSharedPreferences(ICEConstants.PACKAGE_NAME, MODE_PRIVATE);
+        preferences
+                .edit()
+                .putString(ICEConstants.EMERGENCY_CONTACT_NAME_PREF_KEY, contact.getName())
+                .putString(ICEConstants.EMERGENCY_CONTACT_NUMBER_PREF_KEY, contact.getNumber())
+                .apply();
+    }
 
+    private @Nullable EmergencyContact getEmergencyContactFromPreference() {
+        SharedPreferences preferences = getSharedPreferences(ICEConstants.PACKAGE_NAME, MODE_PRIVATE);
+        String name = preferences.getString(ICEConstants.EMERGENCY_CONTACT_NAME_PREF_KEY, null);
+        String number = preferences.getString(ICEConstants.EMERGENCY_CONTACT_NUMBER_PREF_KEY, null);
+        if (name != null && number != null) {
+            return EmergencyContact.getEmergencyContact().setName(name).setNumber(number);
+        }
+        return null;
     }
 
     private void openContactPicker() {

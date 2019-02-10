@@ -17,4 +17,4 @@
 
 ### Screenshot
 
-![ICE App Screenshot](https://github.com/anand-b/in-case-of-emergency/blob/master/screenshot/ICE-Home.png)
+<img src="https://github.com/anand-b/in-case-of-emergency/blob/master/screenshot/ICE-Home.png" width="50%" height="50%" alt="ICE Home Screen" />
